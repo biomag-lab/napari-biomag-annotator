@@ -9,6 +9,11 @@
 
 An annotator tool collection by the BIOMAG group.
 
+This plugin allows object annotation on 2/3D images using 4 assisted annotation methods arising from two napari plugins:
+
+- [napari-annotatorj](https://github.com/spreka/napari-annotatorj)
+- [napari-nD-annotator](https://github.com/bauerdavid/napari-nD-annotator)
+
 ----------------------------------
 
 This [napari] plugin was generated with [Cookiecutter] using [@napari]'s [cookiecutter-napari-plugin] template.
