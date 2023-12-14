@@ -1,0 +1,34 @@
+name: napari-biomag-annotator
+display_name: BIOMAG Annotator
+# use 'hidden' to remove plugin from napari hub search results
+visibility: public
+# see https://napari.org/stable/plugins/manifest.html for valid categories
+categories: ["Annotation", "Segmentation", "Acquisition"]
+contributions:
+  commands:
+    - id: napari-biomag-annotator.get_reader
+      python_name: napari_biomag_annotator._reader:napari_get_reader
+      title: Open data with BIOMAG Annotator
+    - id: napari-biomag-annotator.write_multiple
+      python_name: napari_biomag_annotator._writer:write_multiple
+      title: Save multi-layer data with BIOMAG Annotator
+    - id: napari-biomag-annotator.write_single_image
+      python_name: napari_biomag_annotator._writer:write_single_image
+      title: Save image data with BIOMAG Annotator
+    - id: napari-biomag-annotator.BIOMAGAnnotator
+      python_name: napari_biomag_annotator:BIOMAGAnnotator
+      title: napari-biomag-annotator
+  readers:
+    - command: napari-biomag-annotator.get_reader
+      accepts_directories: false
+      filename_patterns: ['*.npy']
+  writers:
+    - command: napari-biomag-annotator.write_multiple
+      layer_types: ['image*','labels*']
+      filename_extensions: []
+    - command: napari-biomag-annotator.write_single_image
+      layer_types: ['image']
+      filename_extensions: ['.npy']
+  widgets:
+    - command: napari-biomag-annotator.BIOMAGAnnotator
+      display_name: napari-biomag-annotator
