@@ -51,7 +51,7 @@ class BIOMAGAnnotator(QWidget):
 
         self.titleLabel=QLabel('Welcome to the BIOMAG Annotator plugin')
 
-        self.logoFile='biomag_logo'
+        self.logoFile='biomag-logo'#'biomag_logo'
 
         self.logo=QLabel()
         max_size=QSize(250,250)
@@ -76,15 +76,18 @@ class BIOMAGAnnotator(QWidget):
         self.btn4.clicked.connect(self.openMinSurface)
 
         self.mainVBox=QVBoxLayout()
+        self.logoHBox=QHBoxLayout()
         self.topRow=QHBoxLayout()
         self.bottomRow=QHBoxLayout()
 
+        self.logoHBox.addWidget(self.logo)
+        self.logoHBox.setAlignment(Qt.AlignCenter)
         self.topRow.addWidget(self.btn1)
         self.topRow.addWidget(self.btn2)
         self.bottomRow.addWidget(self.btn3)
         self.bottomRow.addWidget(self.btn4)
 
-        self.mainVBox.addWidget(self.logo)
+        self.mainVBox.addWidget(self.logoHBox)
         self.mainVBox.addLayout(self.topRow)
         self.mainVBox.addLayout(self.bottomRow)
 
