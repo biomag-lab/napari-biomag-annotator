@@ -36,6 +36,7 @@ from qtpy.QtGui import QPixmap
 from skimage.util import img_as_float
 import warnings
 import os
+import napari_nd_annotator
 
 if TYPE_CHECKING:
     import napari
@@ -72,7 +73,11 @@ class BIOMAGAnnotator(QWidget):
         self.btn3.clicked.connect(self.openInterpol)
 
         self.btn4 = QPushButton('Minimal Surface')
-        self.btn4.setToolTip('Open Minimal Surface')
+        if napari_nd_annotator.MinimalSurfaceWidget is None:
+            self.btn4.setToolTip("'minimal_surface' Python package is required")
+            self.btn4.setEnabled(False)
+        else:
+            self.btn4.setToolTip('Open Minimal Surface')
         self.btn4.clicked.connect(self.openMinSurface)
 
         self.mainVBox=QVBoxLayout()
@@ -87,7 +92,7 @@ class BIOMAGAnnotator(QWidget):
         self.bottomRow.addWidget(self.btn3)
         self.bottomRow.addWidget(self.btn4)
 
-        self.mainVBox.addWidget(self.logoHBox)
+        self.mainVBox.addLayout(self.logoHBox)
         self.mainVBox.addLayout(self.topRow)
         self.mainVBox.addLayout(self.bottomRow)
 
@@ -102,6 +107,7 @@ class BIOMAGAnnotator(QWidget):
         import napari_nd_annotator
         pluginInstance=napari_nd_annotator._widgets.annotator_module.MinimalContourWidget(self.viewer)
         self.viewer.window.add_dock_widget(pluginInstance,name='Minimal Contour')
+        return pluginInstance
 
     def openInterpol(self):
         import napari_nd_annotator
@@ -110,5 +116,8 @@ class BIOMAGAnnotator(QWidget):
 
     def openMinSurface(self):
         import napari_nd_annotator
-        pluginInstance=napari_nd_annotator.AnnotatorWidget(self.viewer)
-        self.viewer.window.add_dock_widget(pluginInstance,name='Annotator Toolbox')
+        if napari_nd_annotator.MinimalSurfaceWidget is None:
+            return
+        min_contour = self.openMinContour()
+        pluginInstance=napari_nd_annotator.MinimalSurfaceWidget(self.viewer, min_contour)
+        self.viewer.window.add_dock_widget(pluginInstance,name='Minimal Surface')
