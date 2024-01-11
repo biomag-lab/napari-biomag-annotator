@@ -36,7 +36,11 @@ from qtpy.QtGui import QPixmap
 from skimage.util import img_as_float
 import warnings
 import os
-import napari_nd_annotator
+try:
+    from napari_nd_annotator._widgets.minimal_surface_widget import MinimalSurfaceWidget
+    HAS_MINIMAL_SURFACE = MinimalSurfaceWidget is not None
+except ImportError:
+    HAS_MINIMAL_SURFACE = False
 
 if TYPE_CHECKING:
     import napari
@@ -73,11 +77,11 @@ class BIOMAGAnnotator(QWidget):
         self.btn3.clicked.connect(self.openInterpol)
 
         self.btn4 = QPushButton('Minimal Surface')
-        if napari_nd_annotator.MinimalSurfaceWidget is None:
+        if HAS_MINIMAL_SURFACE:
+            self.btn4.setToolTip('Open Minimal Surface')
+        else:
             self.btn4.setToolTip("'minimal_surface' Python package is required")
             self.btn4.setEnabled(False)
-        else:
-            self.btn4.setToolTip('Open Minimal Surface')
         self.btn4.clicked.connect(self.openMinSurface)
 
         self.mainVBox=QVBoxLayout()
@@ -115,9 +119,8 @@ class BIOMAGAnnotator(QWidget):
         self.viewer.window.add_dock_widget(pluginInstance,name='Slice Interpolation')
 
     def openMinSurface(self):
-        import napari_nd_annotator
-        if napari_nd_annotator.MinimalSurfaceWidget is None:
+        if not HAS_MINIMAL_SURFACE:
             return
         min_contour = self.openMinContour()
-        pluginInstance=napari_nd_annotator.MinimalSurfaceWidget(self.viewer, min_contour)
+        pluginInstance=MinimalSurfaceWidget(self.viewer, min_contour)
         self.viewer.window.add_dock_widget(pluginInstance,name='Minimal Surface')
